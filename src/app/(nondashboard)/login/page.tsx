@@ -59,7 +59,7 @@
       return (
         <div className="isolate bg-white px-6 py-24 sm:py-32 lg:px-8">
         <div className="absolute top-6 left-6">
-          <Link href="/landing">
+          <Link href="/">
             <Image src="/logo.png" alt="Your Company" width={100} height={40} priority />
           </Link>
         </div>

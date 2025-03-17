@@ -111,7 +111,7 @@ const SideBar = () => {
                   <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-green-700 px-6 pb-4">
                     <div className="flex h-16 shrink-0 items-center">
                     <div className="flex h-16 shrink-0 items-center">
-                      <Link href="/landing">
+                      <Link href="/">
                         <Image className="h-10 w-auto" src="/logo.png" alt="Your Company" width={100} height={40} priority />
                       </Link>
                     </div>
@@ -194,7 +194,7 @@ const SideBar = () => {
           <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-green-600 px-6 pb-4">
             <div className="flex h-16 shrink-0 items-center">
             <div className="flex h-16 shrink-0 items-center">
-              <Link href="/landing">
+              <Link href="/">
                 <Image className="h-10 w-auto" src="/logo.png" alt="Your Company" width={100} height={40} priority />
               </Link>
             </div>
