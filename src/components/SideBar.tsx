@@ -1,8 +1,6 @@
 'use client';
 
 import { Fragment, useState } from 'react'
-// import logo from '../assets/logo.png'
-// import Centered from './Centered'
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import {
   Bars3Icon,
@@ -27,7 +25,10 @@ const navigation = [
   { name: "Dashboard", href: "/dashboard/centered", icon: HomeIcon, current: false },
   { name: "Wallet", href: "/dashboard/account", icon: WalletIcon, current: false },
   { name: "Upgrade", href: "/upgrade", icon: CheckBadgeIcon, current: false },
-  { name: "Trade", href: "/trade", icon: CalendarIcon, current: false },
+  { name: "Trade", href: "#", icon: CalendarIcon, current: false, children: [
+    { name: "New retail section", href: "/dashboard/trade/new-retail" },
+    { name: "Wholesale section", href: "/trade/wholesale" },
+  ] },
   { name: "Transaction History", href: "/dashboard/transactions", icon: ClockIcon, current: false },
   { name: "Profile", href: "/profile", icon: UserIcon, current: false },
 ];
@@ -47,24 +48,12 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-
-
-
-
 const SideBar = () => {
 
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
     <>
-      {/*
-        This example requires updating your template:
-
-        ```
-        <html class="h-full bg-white">
-        <body class="h-full">
-        ```
-      */}
       <div>
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog as="div" className="relative z-50 lg:hidden" onClose={setSidebarOpen}>
@@ -110,11 +99,11 @@ const SideBar = () => {
                   {/* Sidebar component, swap this element with another sidebar if you like */}
                   <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-green-700 px-6 pb-4">
                     <div className="flex h-16 shrink-0 items-center">
-                    <div className="flex h-16 shrink-0 items-center">
-                      <Link href="/">
-                        <Image className="h-10 w-auto" src="/logo.png" alt="Your Company" width={100} height={40} priority />
-                      </Link>
-                    </div>
+                      <div className="flex h-16 shrink-0 items-center">
+                        <Link href="/">
+                          <Image className="h-10 w-auto" src="/logo.png" alt="Your Company" width={100} height={40} priority />
+                        </Link>
+                      </div>
                     </div>
                     <nav className="flex flex-1 flex-col">
                       <ul role="list" className="flex flex-1 flex-col gap-y-7">
@@ -122,24 +111,76 @@ const SideBar = () => {
                           <ul role="list" className="-mx-2 space-y-1">
                             {navigation.map((item) => (
                               <li key={item.name}>
-                                <a
-                                  href={item.href}
-                                  className={classNames(
-                                    item.current
-                                      ? 'bg-green-700 text-white'
-                                      : 'text-green-200 hover:text-white hover:bg-green-700',
-                                    'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
-                                  )}
-                                >
-                                  <item.icon
+                                {item.children ? (
+                                  <Menu as="div" className="relative">
+                                    <Menu.Button
+                                      className={classNames(
+                                        item.current
+                                          ? 'bg-green-700 text-white'
+                                          : 'text-green-200 hover:text-white hover:bg-green-700',
+                                        'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold w-full'
+                                      )}
+                                    >
+                                      <item.icon
+                                        className={classNames(
+                                          item.current ? 'text-white' : 'text-green-200 group-hover:text-white',
+                                          'h-6 w-6 shrink-0'
+                                        )}
+                                        aria-hidden="true"
+                                      />
+                                      {item.name}
+                                      <ChevronDownIcon className="ml-auto h-5 w-5 text-green-200 group-hover:text-white" aria-hidden="true" />
+                                    </Menu.Button>
+                                    <Transition
+                                      as={Fragment}
+                                      enter="transition ease-out duration-100"
+                                      enterFrom="transform opacity-0 scale-95"
+                                      enterTo="transform opacity-100 scale-100"
+                                      leave="transition ease-in duration-75"
+                                      leaveFrom="transform opacity-100 scale-100"
+                                      leaveTo="transform opacity-0 scale-95"
+                                    >
+                                      <Menu.Items className="absolute left-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-green-600 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                        <div className="py-1">
+                                          {item.children.map((child) => (
+                                            <Menu.Item key={child.name}>
+                                              {({ active }) => (
+                                                <a
+                                                  href={child.href}
+                                                  className={classNames(
+                                                    active ? 'bg-green-700 text-white' : 'text-green-200',
+                                                    'block px-4 py-2 text-sm'
+                                                  )}
+                                                >
+                                                  {child.name}
+                                                </a>
+                                              )}
+                                            </Menu.Item>
+                                          ))}
+                                        </div>
+                                      </Menu.Items>
+                                    </Transition>
+                                  </Menu>
+                                ) : (
+                                  <a
+                                    href={item.href}
                                     className={classNames(
-                                      item.current ? 'text-white' : 'text-green-200 group-hover:text-white',
-                                      'h-6 w-6 shrink-0'
+                                      item.current
+                                        ? 'bg-green-700 text-white'
+                                        : 'text-green-200 hover:text-white hover:bg-green-700',
+                                      'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                                     )}
-                                    aria-hidden="true"
-                                  />
-                                  {item.name}
-                                </a>
+                                  >
+                                    <item.icon
+                                      className={classNames(
+                                        item.current ? 'text-white' : 'text-green-200 group-hover:text-white',
+                                        'h-6 w-6 shrink-0'
+                                      )}
+                                      aria-hidden="true"
+                                    />
+                                    {item.name}
+                                  </a>
+                                )}
                               </li>
                             ))}
                           </ul>
@@ -193,11 +234,11 @@ const SideBar = () => {
           {/* Sidebar component, swap this element with another sidebar if you like */}
           <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-green-600 px-6 pb-4">
             <div className="flex h-16 shrink-0 items-center">
-            <div className="flex h-16 shrink-0 items-center">
-              <Link href="/">
-                <Image className="h-10 w-auto" src="/logo.png" alt="Your Company" width={100} height={40} priority />
-              </Link>
-            </div>
+              <div className="flex h-16 shrink-0 items-center">
+                <Link href="/">
+                  <Image className="h-10 w-auto" src="/logo.png" alt="Your Company" width={100} height={40} priority />
+                </Link>
+              </div>
             </div>
             <nav className="flex flex-1 flex-col">
               <ul role="list" className="flex flex-1 flex-col gap-y-7">
@@ -205,24 +246,76 @@ const SideBar = () => {
                   <ul role="list" className="-mx-2 space-y-1">
                     {navigation.map((item) => (
                       <li key={item.name}>
-                        <a
-                          href={item.href}
-                          className={classNames(
-                            item.current
-                              ? 'bg-green-700 text-white'
-                              : 'text-green-200 hover:text-white hover:bg-green-700',
-                            'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
-                          )}
-                        >
-                          <item.icon
+                        {item.children ? (
+                          <Menu as="div" className="relative">
+                            <Menu.Button
+                              className={classNames(
+                                item.current
+                                  ? 'bg-green-700 text-white'
+                                  : 'text-green-200 hover:text-white hover:bg-green-700',
+                                'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold w-full'
+                              )}
+                            >
+                              <item.icon
+                                className={classNames(
+                                  item.current ? 'text-white' : 'text-green-200 group-hover:text-white',
+                                  'h-6 w-6 shrink-0'
+                                )}
+                                aria-hidden="true"
+                              />
+                              {item.name}
+                              <ChevronDownIcon className="ml-auto h-5 w-5 text-green-200 group-hover:text-white" aria-hidden="true" />
+                            </Menu.Button>
+                            <Transition
+                              as={Fragment}
+                              enter="transition ease-out duration-100"
+                              enterFrom="transform opacity-0 scale-95"
+                              enterTo="transform opacity-100 scale-100"
+                              leave="transition ease-in duration-75"
+                              leaveFrom="transform opacity-100 scale-100"
+                              leaveTo="transform opacity-0 scale-95"
+                            >
+                              <Menu.Items className="absolute left-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-green-600 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                <div className="py-1">
+                                  {item.children.map((child) => (
+                                    <Menu.Item key={child.name}>
+                                      {({ active }) => (
+                                        <a
+                                          href={child.href}
+                                          className={classNames(
+                                            active ? 'bg-green-700 text-white' : 'text-green-200',
+                                            'block px-4 py-2 text-sm'
+                                          )}
+                                        >
+                                          {child.name}
+                                        </a>
+                                      )}
+                                    </Menu.Item>
+                                  ))}
+                                </div>
+                              </Menu.Items>
+                            </Transition>
+                          </Menu>
+                        ) : (
+                          <a
+                            href={item.href}
                             className={classNames(
-                              item.current ? 'text-white' : 'text-green-200 group-hover:text-white',
-                              'h-6 w-6 shrink-0'
+                              item.current
+                                ? 'bg-green-700 text-white'
+                                : 'text-green-200 hover:text-white hover:bg-green-700',
+                              'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                             )}
-                            aria-hidden="true"
-                          />
-                          {item.name}
-                        </a>
+                          >
+                            <item.icon
+                              className={classNames(
+                                item.current ? 'text-white' : 'text-green-200 group-hover:text-white',
+                                'h-6 w-6 shrink-0'
+                              )}
+                              aria-hidden="true"
+                            />
+                            {item.name}
+                          </a>
+                        )}
                       </li>
                     ))}
                   </ul>
@@ -357,13 +450,6 @@ const SideBar = () => {
               </div>
             </div>
           </div>
-
-          {/* <main className="py-10 bg-lime-100">
-            <div className="px-4 sm:px-2 lg:px-4">
-              
-            
-            </div>
-          </main> */}
         </div>
       </div>
     </>
