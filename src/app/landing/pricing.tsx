@@ -1,7 +1,10 @@
-"use client";
+// components/Pricing.tsx
+'use client'; // Add this line to make it a Client Component
 
-import Image from "next/image";
-import React from "react";
+import React from 'react';
+import Image from 'next/image';
+import { useUserContext } from '@/context/UserContext';
+
 
 interface PricingPlan {
   name: string;
@@ -20,6 +23,13 @@ const pricingPlans: PricingPlan[] = [
 ];
 
 const Pricing: React.FC = () => {
+  const { setSubscriptionPlan } = useUserContext(); // Get the setSubscriptionPlan function from context
+
+  const handleSubscribe = (plan: string) => {
+    setSubscriptionPlan(plan); // Update the subscription plan in context
+    localStorage.setItem('subscriptionPlan', plan); // Save to local storage
+  };
+
   return (
     <div
       className="w-full max-w-[1300px] min-h-[500px] bg-cover bg-center bg-no-repeat rounded-3xl shadow-lg flex justify-center items-center px-4 py-10 mx-auto"
@@ -54,7 +64,10 @@ const Pricing: React.FC = () => {
               <div className="text-base sm:text-xl font-bold">{plan.price2}</div>
               <p className="text-xs sm:text-sm mt-2">Life-Time Payment</p>
               <p className="text-xs sm:text-sm">Trading Fee</p>
-              <button className="bg-blue-500 text-white text-xs sm:text-sm mt-3 sm:mt-4 px-3 sm:px-4 py-1 sm:py-2 rounded-md hover:bg-blue-600 transition">
+              <button
+                className="bg-blue-500 text-white text-xs sm:text-sm mt-3 sm:mt-4 px-3 sm:px-4 py-1 sm:py-2 rounded-md hover:bg-blue-600 transition"
+                onClick={() => handleSubscribe(plan.name)} // Call handleSubscribe on button click
+              >
                 Register Now
               </button>
               <ul className="text-xs sm:text-sm text-left mt-3 sm:mt-4 space-y-1">

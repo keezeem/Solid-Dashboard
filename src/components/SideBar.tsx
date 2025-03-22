@@ -1,7 +1,8 @@
-'use client';
+// components/SideBar.tsx
+'use client'; // Ensure this is a Client Component
 
-import { Fragment, useState } from 'react'
-import { Dialog, Menu, Transition } from '@headlessui/react'
+import React, { Fragment, useState } from 'react';
+import { Dialog, Menu, Transition } from '@headlessui/react';
 import {
   Bars3Icon,
   BellIcon,
@@ -12,45 +13,54 @@ import {
   UserIcon,
   WalletIcon,
   XMarkIcon,
-} from '@heroicons/react/24/outline'
-import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
-import { CheckBadgeIcon } from '@heroicons/react/16/solid'
-import { ClockIcon } from '@heroicons/react/16/solid'
+} from '@heroicons/react/24/outline';
+import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid';
+import { CheckBadgeIcon } from '@heroicons/react/16/solid';
+import { ClockIcon } from '@heroicons/react/16/solid';
 import Image from 'next/image';
 import Link from 'next/link';
-
-
-const navigation = [
-  { name: "Create new project", href: "/create", icon: PlusCircleIcon, current: false },
-  { name: "Dashboard", href: "/dashboard/centered", icon: HomeIcon, current: false },
-  { name: "Wallet", href: "/dashboard/account", icon: WalletIcon, current: false },
-  { name: "Upgrade", href: "/upgrade", icon: CheckBadgeIcon, current: false },
-  { name: "Trade", href: "#", icon: CalendarIcon, current: false, children: [
-    { name: "New retail section", href: "/dashboard/trade/new-retail" },
-    { name: "Wholesale section", href: "/trade/wholesale" },
-  ] },
-  { name: "Transaction History", href: "/dashboard/transactions", icon: ClockIcon, current: false },
-  { name: "Profile", href: "/profile", icon: UserIcon, current: false },
-];
-
-
-const teams = [
-  { id: 1, name: 'Heroicons', href: '#', initial: 'H', current: false },
-  { id: 2, name: 'Tailwind Labs', href: '#', initial: 'T', current: false },
-  { id: 3, name: 'Workcation', href: '#', initial: 'W', current: false },
-]
-const userNavigation = [
-  { name: 'Your profile', href: '#' },
-  { name: 'Sign out', href: '#' },
-]
+import { useUserContext } from '../context/UserContext'; // Import the UserContext hook
 
 function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(' ');
 }
 
 const SideBar = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { subscriptionPlan } = useUserContext(); // Get the subscription plan from context
 
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const navigation = [
+    { name: "Subsciption Plan", href: "/create", icon: PlusCircleIcon, current: false, children: [
+      ...(subscriptionPlan ? [{ name: `${subscriptionPlan} Store`, href: `/dashboard/trade/${subscriptionPlan.toLowerCase()}` }] : [])
+    ]},
+    { name: "Dashboard", href: "/dashboard/centered", icon: HomeIcon, current: false },
+    { name: "Wallet", href: "/dashboard/account", icon: WalletIcon, current: false },
+    { name: "Upgrade", href: "/upgrade", icon: CheckBadgeIcon, current: false },
+    { 
+      name: "Trade", 
+      href: "#", 
+      icon: CalendarIcon, 
+      current: false, 
+      children: [
+        { name: "New retail section", href: "/dashboard/trade/new-retail" },
+        { name: "Wholesale section", href: "/trade/wholesale" },
+        
+      ] 
+    },
+    { name: "Transaction History", href: "/dashboard/transactions", icon: ClockIcon, current: false },
+    { name: "Profile", href: "/profile", icon: UserIcon, current: false },
+  ];
+
+  const teams = [
+    { id: 1, name: 'Heroicons', href: '#', initial: 'H', current: false },
+    { id: 2, name: 'Tailwind Labs', href: '#', initial: 'T', current: false },
+    { id: 3, name: 'Workcation', href: '#', initial: 'W', current: false },
+  ];
+
+  const userNavigation = [
+    { name: 'Your profile', href: '#' },
+    { name: 'Sign out', href: '#' },
+  ];
 
   return (
     <>
@@ -96,7 +106,6 @@ const SideBar = () => {
                       </button>
                     </div>
                   </Transition.Child>
-                  {/* Sidebar component, swap this element with another sidebar if you like */}
                   <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-green-700 px-6 pb-4">
                     <div className="flex h-16 shrink-0 items-center">
                       <div className="flex h-16 shrink-0 items-center">
@@ -231,7 +240,6 @@ const SideBar = () => {
 
         {/* Static sidebar for desktop */}
         <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
-          {/* Sidebar component, swap this element with another sidebar if you like */}
           <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-green-600 px-6 pb-4">
             <div className="flex h-16 shrink-0 items-center">
               <div className="flex h-16 shrink-0 items-center">
@@ -373,7 +381,6 @@ const SideBar = () => {
               </h1>
             </div>
 
-            {/* Separator */}
             <div className="h-6 w-px bg-gray-900/10 lg:hidden" aria-hidden="true" />
 
             <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
@@ -399,19 +406,11 @@ const SideBar = () => {
                   <BellIcon className="h-6 w-6" aria-hidden="true" />
                 </button>
 
-                {/* Separator */}
                 <div className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10" aria-hidden="true" />
 
-                {/* Profile dropdown */}
                 <Menu as="div" className="relative">
                   <Menu.Button className="-m-1.5 flex items-center p-1.5">
                     <span className="sr-only">Open user menu</span>
-                    {/* <Image
-                      className="h-8 w-8 rounded-full bg-gray-50"
-                      src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                      alt=""
-                      width={100} height={40} priority
-                    /> */}
                     <span className="hidden lg:flex lg:items-center">
                       <span className="ml-4 text-sm font-semibold leading-6 text-gray-900" aria-hidden="true">
                         Tom Cook
@@ -453,7 +452,7 @@ const SideBar = () => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default SideBar
+export default SideBar;
