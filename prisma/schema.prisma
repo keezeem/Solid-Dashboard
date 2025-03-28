@@ -21,5 +21,6 @@ model User {
   password       String
   phoneNumber    String  @unique
   address        String?
+  subscriptionPlan String?
   createdAt      DateTime @default(now())
 }

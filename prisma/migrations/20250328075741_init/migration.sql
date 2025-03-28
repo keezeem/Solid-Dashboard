@@ -7,6 +7,7 @@ CREATE TABLE "User" (
     "password" TEXT NOT NULL,
     "phoneNumber" TEXT NOT NULL,
     "address" TEXT,
+    "subscriptionPlan" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
