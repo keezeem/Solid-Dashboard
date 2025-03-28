@@ -1,4 +1,3 @@
-// app/register/page.tsx
 'use client';
 
 import { useState } from 'react';
@@ -6,6 +5,7 @@ import { Switch } from '@headlessui/react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useUserContext } from '@/context/UserContext';
 
 interface SubscriptionPlan {
   name: string;
@@ -27,7 +27,9 @@ export default function Register() {
 
   const [error, setError] = useState('');
   const [selectedPlanPrice, setSelectedPlanPrice] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const { setUserSubscription } = useUserContext();
 
   const subscriptionPlans: SubscriptionPlan[] = [
     { name: 'Bronze Store', price: 50000 },
@@ -54,21 +56,26 @@ export default function Register() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
+    setError('');
 
     const { firstName, lastName, email, password, confirmPassword, phoneNumber, address, agreed, subscriptionPlan } = formData;
 
     if (!agreed) {
       setError('You must agree to the privacy policy.');
+      setIsLoading(false);
       return;
     }
 
     if (!firstName || !lastName || !email || !password || !confirmPassword || !phoneNumber || !address || !subscriptionPlan) {
       setError('Please fill all the fields.');
+      setIsLoading(false);
       return;
     }
 
     if (password !== confirmPassword) {
       setError('Passwords do not match.');
+      setIsLoading(false);
       return;
     }
 
@@ -77,13 +84,22 @@ export default function Register() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          ...formData,
-          subscriptionPrice: selectedPlanPrice // Include price in submission if needed
+          firstName,
+          lastName,
+          email,
+          password,
+          phoneNumber,
+          address,
+          subscriptionPlan,
+          subscriptionPrice: selectedPlanPrice
         }),
       });
 
       const data = await res.json();
       if (res.ok) {
+        if (subscriptionPlan && selectedPlanPrice) {
+          setUserSubscription(subscriptionPlan, selectedPlanPrice);
+        }
         router.push('/login');
       } else {
         setError(data.error || 'Registration failed.');
@@ -91,6 +107,8 @@ export default function Register() {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       setError('Registration failed. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -247,9 +265,20 @@ export default function Register() {
 
         <button 
           type="submit" 
-          className="mt-6 block w-full rounded-md bg-green-600 px-4 py-2 text-white shadow-sm hover:bg-green-700 focus:ring-2 focus:ring-green-600"
+          disabled={isLoading}
+          className="mt-6 flex items-center justify-center w-full rounded-md bg-green-600 px-4 py-2 text-white shadow-sm hover:bg-green-700 focus:ring-2 focus:ring-green-600 disabled:opacity-70 disabled:cursor-not-allowed"
         >
-          Sign Up
+          {isLoading ? (
+            <>
+              <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Processing...
+            </>
+          ) : (
+            'Sign Up'
+          )}
         </button>
 
         <div className="flex flex-col items-center mt-6">

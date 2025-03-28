@@ -1,41 +1,38 @@
 // context/UserContext.tsx
 'use client'; // Add this line
 
-import React, { createContext, useState, useEffect, useContext } from 'react';
+// import React, { createContext, useState, useEffect, useContext } from 'react';
 
-type UserContextType = {
+import { createContext, useContext, ReactNode, useState } from 'react';
+
+interface UserContextType {
   subscriptionPlan: string | null;
-  setSubscriptionPlan: (plan: string | null) => void;
-};
+  subscriptionPrice: number | null;
+  setUserSubscription: (plan: string, price: number) => void;
+}
 
-export const UserContext = createContext<UserContextType | undefined>(undefined);
+const UserContext = createContext<UserContextType | undefined>(undefined);
 
-type UserProviderProps = {
-  children: React.ReactNode;
-};
-
-export const UserProvider = ({ children }: UserProviderProps) => {
+export function UserProvider({ children }: { children: ReactNode }) {
   const [subscriptionPlan, setSubscriptionPlan] = useState<string | null>(null);
+  const [subscriptionPrice, setSubscriptionPrice] = useState<number | null>(null);
 
-  // Initialize the subscription plan from local storage on component mount
-  useEffect(() => {
-    const savedPlan = localStorage.getItem('subscriptionPlan');
-    if (savedPlan) {
-      setSubscriptionPlan(savedPlan);
-    }
-  }, []);
+  const setUserSubscription = (plan: string, price: number) => {
+    setSubscriptionPlan(plan);
+    setSubscriptionPrice(price);
+  };
 
   return (
-    <UserContext.Provider value={{ subscriptionPlan, setSubscriptionPlan }}>
+    <UserContext.Provider value={{ subscriptionPlan, subscriptionPrice, setUserSubscription }}>
       {children}
     </UserContext.Provider>
   );
-};
+}
 
-export const useUserContext = () => {
+export function useUserContext() {
   const context = useContext(UserContext);
   if (context === undefined) {
     throw new Error('useUserContext must be used within a UserProvider');
   }
   return context;
-};
+}

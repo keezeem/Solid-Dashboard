@@ -1,5 +1,4 @@
-// components/SideBar.tsx
-'use client'; // Ensure this is a Client Component
+'use client';
 
 import React, { Fragment, useState } from 'react';
 import { Dialog, Menu, Transition } from '@headlessui/react';
@@ -19,20 +18,47 @@ import { CheckBadgeIcon } from '@heroicons/react/16/solid';
 import { ClockIcon } from '@heroicons/react/16/solid';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useUserContext } from '../context/UserContext'; // Import the UserContext hook
+import { useUserContext } from '../context/UserContext';
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
 
+// Define types for navigation items
+type NavigationItem = {
+  name: string;
+  href: string;
+  icon: React.ComponentType<React.ComponentProps<'svg'>>;
+  current: boolean;
+  children?: NavigationChildItem[];
+};
+
+type NavigationChildItem = {
+  name: string;
+  href: string;
+  description?: string;
+};
+
 const SideBar = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { subscriptionPlan } = useUserContext(); // Get the subscription plan from context
+  const { subscriptionPlan, subscriptionPrice } = useUserContext();
 
-  const navigation = [
-    { name: "Subsciption Plan", href: "/create", icon: PlusCircleIcon, current: false, children: [
-      ...(subscriptionPlan ? [{ name: `${subscriptionPlan} Store`, href: `/dashboard/trade/${subscriptionPlan.toLowerCase()}` }] : [])
-    ]},
+  const navigation: NavigationItem[] = [
+    { 
+      name: "Subscription Plan", 
+      href: "#", 
+      icon: PlusCircleIcon, 
+      current: false, 
+      children: subscriptionPlan ? [
+        { 
+          name: `${subscriptionPlan} Store`, 
+          href: "#",
+          description: `₦${subscriptionPrice?.toLocaleString() || ''} per month`
+        }
+      ] : [
+        { name: "No active subscription", href: "/upgrade" }
+      ]
+    },
     { name: "Dashboard", href: "/dashboard/centered", icon: HomeIcon, current: false },
     { name: "Wallet", href: "/dashboard/account", icon: WalletIcon, current: false },
     { name: "Upgrade", href: "/upgrade", icon: CheckBadgeIcon, current: false },
@@ -44,7 +70,6 @@ const SideBar = () => {
       children: [
         { name: "New retail section", href: "/dashboard/trade/new-retail" },
         { name: "Wholesale section", href: "/trade/wholesale" },
-        
       ] 
     },
     { name: "Transaction History", href: "/dashboard/transactions", icon: ClockIcon, current: false },
@@ -65,6 +90,7 @@ const SideBar = () => {
   return (
     <>
       <div>
+        {/* Mobile sidebar dialog */}
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog as="div" className="relative z-50 lg:hidden" onClose={setSidebarOpen}>
             <Transition.Child
@@ -154,15 +180,18 @@ const SideBar = () => {
                                           {item.children.map((child) => (
                                             <Menu.Item key={child.name}>
                                               {({ active }) => (
-                                                <a
+                                                <Link
                                                   href={child.href}
                                                   className={classNames(
                                                     active ? 'bg-green-700 text-white' : 'text-green-200',
                                                     'block px-4 py-2 text-sm'
                                                   )}
                                                 >
-                                                  {child.name}
-                                                </a>
+                                                  <div className="font-medium">{child.name}</div>
+                                                  {child.description && (
+                                                    <div className="text-xs mt-1">{child.description}</div>
+                                                  )}
+                                                </Link>
                                               )}
                                             </Menu.Item>
                                           ))}
@@ -171,7 +200,7 @@ const SideBar = () => {
                                     </Transition>
                                   </Menu>
                                 ) : (
-                                  <a
+                                  <Link
                                     href={item.href}
                                     className={classNames(
                                       item.current
@@ -188,7 +217,7 @@ const SideBar = () => {
                                       aria-hidden="true"
                                     />
                                     {item.name}
-                                  </a>
+                                  </Link>
                                 )}
                               </li>
                             ))}
@@ -199,7 +228,7 @@ const SideBar = () => {
                           <ul role="list" className="-mx-2 mt-2 space-y-1">
                             {teams.map((team) => (
                               <li key={team.name}>
-                                <a
+                                <Link
                                   href={team.href}
                                   className={classNames(
                                     team.current
@@ -212,13 +241,13 @@ const SideBar = () => {
                                     {team.initial}
                                   </span>
                                   <span className="truncate">{team.name}</span>
-                                </a>
+                                </Link>
                               </li>
                             ))}
                           </ul>
                         </li>
                         <li className="mt-auto">
-                          <a
+                          <Link
                             href="#"
                             className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-green-200 hover:bg-green-700 hover:text-white"
                           >
@@ -227,7 +256,7 @@ const SideBar = () => {
                               aria-hidden="true"
                             />
                             Settings
-                          </a>
+                          </Link>
                         </li>
                       </ul>
                     </nav>
@@ -288,15 +317,18 @@ const SideBar = () => {
                                   {item.children.map((child) => (
                                     <Menu.Item key={child.name}>
                                       {({ active }) => (
-                                        <a
+                                        <Link
                                           href={child.href}
                                           className={classNames(
                                             active ? 'bg-green-700 text-white' : 'text-green-200',
                                             'block px-4 py-2 text-sm'
                                           )}
                                         >
-                                          {child.name}
-                                        </a>
+                                          <div className="font-medium">{child.name}</div>
+                                          {child.description && (
+                                            <div className="text-xs mt-1">{child.description}</div>
+                                          )}
+                                        </Link>
                                       )}
                                     </Menu.Item>
                                   ))}
@@ -305,7 +337,7 @@ const SideBar = () => {
                             </Transition>
                           </Menu>
                         ) : (
-                          <a
+                          <Link
                             href={item.href}
                             className={classNames(
                               item.current
@@ -322,7 +354,7 @@ const SideBar = () => {
                               aria-hidden="true"
                             />
                             {item.name}
-                          </a>
+                          </Link>
                         )}
                       </li>
                     ))}
@@ -333,7 +365,7 @@ const SideBar = () => {
                   <ul role="list" className="-mx-2 mt-2 space-y-1">
                     {teams.map((team) => (
                       <li key={team.name}>
-                        <a
+                        <Link
                           href={team.href}
                           className={classNames(
                             team.current
@@ -346,13 +378,13 @@ const SideBar = () => {
                             {team.initial}
                           </span>
                           <span className="truncate">{team.name}</span>
-                        </a>
+                        </Link>
                       </li>
                     ))}
                   </ul>
                 </li>
                 <li className="mt-auto">
-                  <a
+                  <Link
                     href="#"
                     className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-green-200 hover:bg-green-700 hover:text-white"
                   >
@@ -361,7 +393,7 @@ const SideBar = () => {
                       aria-hidden="true"
                     />
                     Settings
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </nav>
@@ -431,7 +463,7 @@ const SideBar = () => {
                       {userNavigation.map((item) => (
                         <Menu.Item key={item.name}>
                           {({ active }) => (
-                            <a
+                            <Link
                               href={item.href}
                               className={classNames(
                                 active ? 'bg-gray-50' : '',
@@ -439,7 +471,7 @@ const SideBar = () => {
                               )}
                             >
                               {item.name}
-                            </a>
+                            </Link>
                           )}
                         </Menu.Item>
                       ))}
@@ -448,7 +480,23 @@ const SideBar = () => {
                 </Menu>
               </div>
             </div>
+
+            {/* Subscription Plan Badge */}
+            {subscriptionPlan && (
+              <div className="ml-auto flex items-center">
+                <div className="rounded-md bg-green-100 px-3 py-1 text-sm font-medium text-green-800 flex items-center">
+                  <CheckBadgeIcon className="h-4 w-4 mr-1 text-green-600" />
+                  {subscriptionPlan} - ₦{subscriptionPrice?.toLocaleString()}
+                </div>
+              </div>
+            )}
           </div>
+
+          {/* <main className="py-10">
+            <div className="px-4 sm:px-6 lg:px-8"> */}
+              {/* Your main content goes here */}
+            {/* </div>
+          </main> */}
         </div>
       </div>
     </>

@@ -14,13 +14,14 @@ datasource db {
 }
 
 model User {
-  id             String   @id @default(uuid())
-  firstName      String
-  lastName       String
-  email          String  @unique
-  password       String
-  phoneNumber    String  @unique
-  address        String?
+  id               String   @id @default(uuid())
+  firstName        String
+  lastName         String
+  email            String   @unique
+  password         String
+  phoneNumber      String   @unique
+  address          String?
   subscriptionPlan String?
-  createdAt      DateTime @default(now())
+  subscriptionPrice Int?
+  createdAt        DateTime @default(now())
 }
