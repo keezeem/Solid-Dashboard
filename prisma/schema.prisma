@@ -23,5 +23,8 @@ model User {
   address          String?
   subscriptionPlan String?
   subscriptionPrice Int?
+  isVerified       Boolean  @default(false)
+  otp              String?
+  otpExpiry        DateTime?
   createdAt        DateTime @default(now())
 }

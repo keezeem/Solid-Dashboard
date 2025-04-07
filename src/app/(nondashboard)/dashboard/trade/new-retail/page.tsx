@@ -2,20 +2,8 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
 
 const NewRetailSection = () => {
-  const [numberOfItems, setNumberOfItems] = useState(0);
-
-  const incrementItems = () => {
-    setNumberOfItems((prev) => prev + 1);
-  };
-
-  const decrementItems = () => {
-    if (numberOfItems > 1) {
-      setNumberOfItems((prev) => prev - 1);
-    }
-  };
 
   return (
     <div className="lg:pl-72 bg-lime-100 min-h-screen p-8">
@@ -71,14 +59,12 @@ const NewRetailSection = () => {
             <span className="font-semibold">Number of items</span>
             <div className="flex items-center gap-2">
               <button
-                onClick={decrementItems}
                 className="bg-green-700 text-white w-8 h-8 rounded-md flex items-center justify-center hover:bg-green-800 transition-colors"
               >
                 -
               </button>
-              <span className="text-lg font-semibold">{numberOfItems}</span>
+              <span className="text-lg font-semibold">1</span>
               <button
-                onClick={incrementItems}
                 className="bg-green-700 text-white w-8 h-8 rounded-md flex items-center justify-center hover:bg-green-800 transition-colors"
               >
                 +

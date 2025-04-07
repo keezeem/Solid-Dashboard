@@ -69,7 +69,7 @@ const SideBar = () => {
       current: false, 
       children: [
         { name: "New retail section", href: "/dashboard/trade/new-retail" },
-        { name: "Wholesale section", href: "/trade/wholesale" },
+        { name: "Wholesale section", href: "/dashboard/trade/whole-sale" },
       ] 
     },
     { name: "Transaction History", href: "/dashboard/transactions", icon: ClockIcon, current: false },

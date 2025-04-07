@@ -22,27 +22,27 @@ const Account: React.FC = () => {
   ];
 
   return (
-    <div className="flex flex-col items-center px-4 md:px-6 lg:px-10 w-full">
+    <div className="lg:pl-72 bg-lime-100">
       {/* Main content */}
       <main className="flex-1 overflow-auto ml max-w-6xl">
         <div className="p-6 w-full">
           <h1 className="text-xl font-bold text-left">Withdraw</h1>
 
-          {/* Balance and Actions Section */}
-          <div className="flex flex-wrap md:flex-nowrap items-center mt-10 gap-6 w-full">
-            <div className="bg-green-800 text-white h-44 p-6 rounded-2xl text-center flex-1 min-w-[250px]">
-              <p className="text-sm">Total Balance</p>
-              <p className="text-3xl font-bold">57,000.00</p>
-            </div>
-
-            <div className="flex flex-col w-full md:w-[300px] gap-4">
-              <button className="bg-green-800 text-white py-3 h-20 rounded-2xl w-full">Withdraw</button>
-              <button className="bg-green-800 text-white py-3 h-20 rounded-2xl w-full">Deposit</button>
-            </div>
+         {/* Balance and Actions Section */}
+        <div className="flex flex-col md:flex-row gap-6 mb-4">
+          <div className="bg-green-700 text-white p-6 rounded-xl flex-1">
+            <p className="text-sm">Total Balance</p>
+            <p className="text-3xl font-bold">57,000.00</p>
           </div>
 
+          <div className="flex flex-col gap-4 w-full md:w-48">
+            <button className="bg-green-700 text-white py-4 rounded-xl">Withdraw</button>
+            <button className="bg-gray-200 text-gray-800 py-4 rounded-xl">Deposit</button>
+          </div>
+        </div>
+
           {/* Amount Input */}
-          <div className="w-full max-w-md mt-6">
+          <div className="w-full max-w-md mb-4">
             <label className="block text-sm font-medium mb-2">Amount</label>
             <div className="flex items-center rounded-3xl overflow-hidden p-1 border">
               <input
@@ -56,24 +56,30 @@ const Account: React.FC = () => {
             </div>
           </div>
 
-          {/* Withdrawal Methods */}
-          <div className="w-full max-w-md mt-6">
-            <h2 className="text-sm font-semibold mb-3">Withdraw Method</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-              {methods.map((method) => (
-                <button
-                  key={method.id}
-                  className={`border p-4 rounded flex flex-col items-center w-full transition-all ${selectedMethod === method.id ? 'border-green-700' : 'border-gray-300'} ${method.available ? 'hover:border-green-500' : 'opacity-50 cursor-not-allowed'}`}
-                  onClick={() => method.available && setSelectedMethod(method.id)}
-                  disabled={!method.available}
-                >
-                  <div className="text-2xl mb-2">{method.icon}</div>
-                  <div className="font-semibold text-sm">{method.name}</div>
-                  <div className="text-xs text-gray-500">{method.description}</div>
-                </button>
-              ))}
-            </div>
+           {/* Withdrawal Methods */}
+        <div className="bg-white p-6 rounded-xl mb-4">
+          <h2 className="text-sm font-semibold mb-4">Withdraw Method</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {methods.map((method) => (
+              <button
+                key={method.id}
+                className={`p-4 border rounded-lg flex flex-col items-center ${
+                  selectedMethod === method.id 
+                    ? 'border-green-600 bg-green-50' 
+                    : 'border-gray-300'
+                } ${
+                  !method.available && 'opacity-50 cursor-not-allowed'
+                }`}
+                onClick={() => method.available && setSelectedMethod(method.id)}
+                disabled={!method.available}
+              >
+                <div className="text-2xl mb-2 text-green-600">{method.icon}</div>
+                <div className="font-medium">{method.name}</div>
+                <div className="text-sm text-gray-500">{method.description}</div>
+              </button>
+            ))}
           </div>
+        </div>
 
           {/* Continue Button */}
           <button className="bg-green-800 text-white py-3 px-10 w-full md:w-48 rounded-xl mt-6">Continue</button>

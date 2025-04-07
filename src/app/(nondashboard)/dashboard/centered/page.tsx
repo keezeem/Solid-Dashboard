@@ -9,13 +9,13 @@ const Centered: React.FC = () => {
   const stats = [
     {
       title: "Shop Free",
-      value: "$50,000",
+      value: "₦50,000",
       change: "12% increase from last month",
       avatar: "/Framee1.png", // Public folder path
     },
     {
       title: "Trading Fee",
-      value: "$50,000",
+      value: "₦50,000",
       change: "10% decrease from last month",
       avatar: "/Framee2.png", // Public folder path
     },
@@ -27,7 +27,7 @@ const Centered: React.FC = () => {
     },
     {
       title: "Cart",
-      value: "$50,000",
+      value: "₦50,000",
       change: "Items in your Cart",
       avatar: "/Framee4.png", // Public folder path
     },

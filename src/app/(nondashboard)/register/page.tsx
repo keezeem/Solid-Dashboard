@@ -32,11 +32,11 @@ export default function Register() {
   const { setUserSubscription } = useUserContext();
 
   const subscriptionPlans: SubscriptionPlan[] = [
-    { name: 'Bronze Store', price: 50000 },
-    { name: 'Silver Store', price: 100000 },
-    { name: 'Gold Store', price: 300000 },
-    { name: 'Platinum Store', price: 600000 },
-    { name: 'Diamond Store', price: 1200000 }
+    { name: 'Bronze Store', price: 100000 },
+    { name: 'Silver Store', price: 200000 },
+    { name: 'Gold Store', price: 560000 },
+    { name: 'Platinum Store', price: 1120000 },
+    { name: 'Diamond Store', price: 2240000 }
   ];
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
