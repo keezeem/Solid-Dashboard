@@ -12,7 +12,6 @@
 import Navbar from "@/components/Navbar"
 import About from "./landing/about"
 import Avater from "./landing/avater"
-import Exploring from "./landing/exploring"
 import Footer from "./landing/footer"
 import HeroSection from "./landing/heroSection"
 import PowerfullySimple from "./landing/powerfullySimple"
@@ -29,7 +28,6 @@ const Landing = () => {
       <Pricing/>
       <About/>
       <PowerfullySimple/>
-      <Exploring />
       <Footer/>
     </div>
   )
