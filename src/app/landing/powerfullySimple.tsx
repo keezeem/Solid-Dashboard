@@ -6,7 +6,7 @@ import Image from "next/image";
 const PowerfullySimple: React.FC = () => {
   return (
     <div
-      className="w-full max-w-[1300px] h-auto sm:h-[500px] bg-cover bg-center bg-no-repeat rounded-3xl shadow-lg flex flex-col sm:flex-row overflow-hidden mx-auto relative"
+      className="w-full max-w-[1300px] h-auto sm:h-[600px] bg-cover bg-center bg-no-repeat rounded-3xl shadow-lg flex flex-col sm:flex-row overflow-hidden mx-auto relative mb-8"
     >
       {/* Background Image */}
       <Image
